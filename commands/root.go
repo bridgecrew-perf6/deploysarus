@@ -7,10 +7,11 @@ import (
 
 var (
 	rootCmd = &cobra.Command{
-		Use:   "deploysarus <command> [flags]",
-		Short: "Deploysarus is auto deployment tool based on github, gitlab, gogs webhook",
+		Version: "0.0.1",
+		Use:     "deploysarus <command> [flags]",
+		Short:   "Deploysarus is auto deployment tool based on github, gitlab, gogs webhooks",
 		Long: heredoc.Doc(`
-			A auto deployment tool based on github, gitlab, bitbucket, gogs webhook
+			A auto deployment tool based on github, gitlab, bitbucket and gogs webhooks
 			More info at https://github.com/cjaewon/deploysarus
 		`),
 		Example: heredoc.Doc(`

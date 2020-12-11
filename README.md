@@ -1,2 +1,3 @@
 # deploysarus
-A auto deployment tool based on github, gitlab, gogs webhook
+A auto deployment tool based on Github, Gitlab and Bitbucket webhooks
+
