@@ -1,17 +1,24 @@
 package config
 
 import (
-	"fmt"
-
 	"github.com/spf13/viper"
 )
 
 var v = viper.New()
 
-// LoadConfigFile with custome path
-func LoadConfigFile(path string) {
+func init() {
+	v.SetDefault("platform", "github")
+	// setting
+	v.SetDefault("server.address", "0.0.0.0")
+	v.SetDefault("server.port", 1515)
+	v.SetDefault("server.path", "/webhooks")
+
+}
+
+// Load with custome path
+func Load(path string) error {
 	v.SetConfigFile(path)
-	v.ReadInConfig()
+	return v.ReadInConfig()
 }
 
 // Set config value
@@ -19,8 +26,17 @@ func Set(key string, value interface{}) {
 	v.Set(key, value)
 }
 
-// Get config value
+// Get gets value
 func Get(key string) interface{} {
-	fmt.Printf("%#v", v)
 	return v.Get(key)
+}
+
+// GetInt gets int value
+func GetInt(key string) int {
+	return v.GetInt(key)
+}
+
+// GetString gets string value
+func GetString(key string) string {
+	return v.GetString(key)
 }
