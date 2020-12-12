@@ -41,3 +41,8 @@ func GetInt(key string) int {
 func GetString(key string) string {
 	return v.GetString(key)
 }
+
+// GetStringMap gets string map value
+func GetStringMap(key string) map[string]interface{} {
+	return v.GetStringMap(key)
+}
