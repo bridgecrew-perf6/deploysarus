@@ -1,11 +1,11 @@
 name: example server
 platform: github
-secret_key: '1'
+secret_key: ''
 
 server:
-  address: '0.0.0.0'
-  port: 3000
-  path: '/webhooks'
+  # address: '0.0.0.0'
+  # port: 3000
+  path: '/'
 
 
 on:
@@ -15,4 +15,6 @@ on:
 
 jobs:
   deploy:
-    steps:
+    steps :
+      - name: Just echo hello world
+        run: echo "Hello World"

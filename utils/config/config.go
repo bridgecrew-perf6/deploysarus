@@ -10,7 +10,7 @@ func init() {
 	v.SetDefault("name", "server-1")
 	v.SetDefault("platform", "github")
 	// setting
-	v.SetDefault("server.address", "0.0.0.0")
+	v.SetDefault("server.address", "localhost")
 	v.SetDefault("server.port", 1515)
 	v.SetDefault("server.path", "/webhooks")
 
@@ -42,7 +42,17 @@ func GetString(key string) string {
 	return v.GetString(key)
 }
 
+// GetStringSlice gets strings value
+func GetStringSlice(key string) []string {
+	return v.GetStringSlice(key)
+}
+
 // GetStringMap gets string map value
 func GetStringMap(key string) map[string]interface{} {
 	return v.GetStringMap(key)
+}
+
+// UnmarshalKey is wrapper of viper Unmarshal key
+func UnmarshalKey(key string, pointer interface{}) error {
+	return v.UnmarshalKey(key, pointer)
 }

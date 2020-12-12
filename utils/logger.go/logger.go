@@ -59,6 +59,12 @@ func Errorln(v ...interface{}) {
 	fmt.Println()
 }
 
+// Errorlnf is Errorf wrapper with new line
+func Errorlnf(format string, v ...interface{}) {
+	Errorf(format, v...)
+	fmt.Println()
+}
+
 // ErrorFatal is Error wrapper with os exit
 func ErrorFatal(v ...interface{}) {
 	Error(v...)
@@ -74,5 +80,11 @@ func ErrorfFatal(format string, v ...interface{}) {
 // ErrorlnFatal is Errorln wrapper with os exit
 func ErrorlnFatal(v ...interface{}) {
 	Errorln(v...)
+	os.Exit(1)
+}
+
+// ErrorlnfFatal is Errorlnf wrapper with os exit
+func ErrorlnfFatal(format string, v ...interface{}) {
+	Errorlnf(format, v...)
 	os.Exit(1)
 }

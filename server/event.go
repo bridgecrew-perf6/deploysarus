@@ -3,8 +3,17 @@ package server
 import (
 	"github.com/cjaewon/deploysarus/utils/config"
 	"github.com/cjaewon/deploysarus/utils/logger.go"
+
 	"gopkg.in/go-playground/webhooks.v5/github"
 )
+
+// Step defines a jobs steps type
+type Step struct {
+	Name string                 `mapstructure:"name"`
+	Run  string                 `mapstructure:"run"`
+	Uses string                 `mapstructure:"uses"`
+	With map[string]interface{} `mapstructure:"with"`
+}
 
 func parseGithubEvent(platform string) []github.Event {
 	on := config.GetStringMap("on")
