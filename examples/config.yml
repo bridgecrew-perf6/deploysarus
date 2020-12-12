@@ -1,10 +1,10 @@
-name: example
+name: example server
 platform: github
-# secret_key: '1'
+secret_key: '1'
 
 server:
   address: '0.0.0.0'
-  port: "15115"
+  port: 3000
   path: '/webhooks'
 
 
@@ -16,26 +16,3 @@ on:
 jobs:
   deploy:
     steps:
-      - uses: actions/checkout@v2
-        with:
-          submodules: true  # Fetch Hugo themes (true OR recursive)
-          fetch-depth: 0    # Fetch all history for .GitInfo and .Lastmod
-
-      - name: Setup Hugo
-        uses: peaceiris/actions-hugo@v2
-        with:
-          hugo-version: '0.78.0'
-          extended: true
-            
-      - name: Setup Nodejs
-        uses: actions/setup-node@v1
-        with:
-           node-version: '14'
-           
-      - name: Build
-        run: |
-          npm install --prefix ./assets/scripts
-          hugo --gc --minify
-          echo "c.cjaewon.com" > ./public/CNAME
-          touch ./public/.nojekyll
-          

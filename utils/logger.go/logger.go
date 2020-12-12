@@ -20,15 +20,20 @@ func Println(v ...interface{}) {
 	fmt.Println(v...)
 }
 
+// Printlnf is Println and Sprintf wrapper
+func Printlnf(format string, v ...interface{}) {
+	Println(fmt.Sprintf(format, v...))
+}
+
 // Warn is fmt Print wrapper with prefix
 func Warn(v ...interface{}) {
-	fmt.Print("[Warn] ")
+	fmt.Print("Warn: ")
 	fmt.Print(v...)
 }
 
 // Warnf is fmt Printf wrapper with prefix
 func Warnf(format string, v ...interface{}) {
-	fmt.Printf("[Warn] %s", v...)
+	fmt.Printf("Warn: %s", v...)
 }
 
 // Warnln is Error wrapper with new line
@@ -39,13 +44,13 @@ func Warnln(v ...interface{}) {
 
 // Error is fmt Print wrapper with prefix
 func Error(v ...interface{}) {
-	fmt.Print("[Error] ")
+	fmt.Print("Error: ")
 	fmt.Print(v...)
 }
 
 // Errorf is fmt Printf wrapper with prefix
 func Errorf(format string, v ...interface{}) {
-	fmt.Printf("[Error] %s", v...)
+	fmt.Printf("Error: %s", v...)
 }
 
 // Errorln is Error wrapper with new line

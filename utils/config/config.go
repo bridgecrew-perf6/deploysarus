@@ -7,6 +7,7 @@ import (
 var v = viper.New()
 
 func init() {
+	v.SetDefault("name", "server-1")
 	v.SetDefault("platform", "github")
 	// setting
 	v.SetDefault("server.address", "0.0.0.0")
@@ -15,7 +16,7 @@ func init() {
 
 }
 
-// Load with custome path
+// Load with custom path
 func Load(path string) error {
 	v.SetConfigFile(path)
 	return v.ReadInConfig()

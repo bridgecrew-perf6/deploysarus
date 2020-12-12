@@ -1,6 +1,8 @@
 package commands
 
 import (
+	"os"
+
 	"github.com/MakeNowJust/heredoc"
 	"github.com/spf13/cobra"
 )
@@ -31,5 +33,7 @@ func init() {
 
 // Execute rootCmd
 func Execute() {
-	rootCmd.Execute()
+	if err := rootCmd.Execute(); err != nil {
+		os.Exit(1)
+	}
 }

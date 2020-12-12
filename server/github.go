@@ -1,6 +1,7 @@
 package server
 
 import (
+	"fmt"
 	"net/http"
 	"os"
 
@@ -16,12 +17,27 @@ func githubHandler() func(w http.ResponseWriter, r *http.Request) {
 		os.Exit(1)
 	}
 
-	_, err := github.New(github.Options.Secret(secretKey))
+	hook, err := github.New(github.Options.Secret(secretKey))
 	if err != nil {
 		logger.ErrorlnFatal(err)
 	}
 
 	return func(w http.ResponseWriter, r *http.Request) {
+		payload, err := hook.Parse(r, github.ReleaseEvent, github.PushEvent)
+		if err != nil {
+			if err != github.ErrEventNotFound {
+				logger.Error(err)
+			}
+		}
 
+		switch payload.(type) {
+		case github.ReleasePayload:
+			release := payload.(github.ReleasePayload)
+			fmt.Printf("%+v", release)
+
+		case github.PullRequestPayload:
+			pullRequest := payload.(github.PullRequestPayload)
+			fmt.Printf("%+v", pullRequest)
+		}
 	}
 }

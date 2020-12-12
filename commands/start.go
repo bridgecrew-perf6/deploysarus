@@ -27,7 +27,7 @@ func startFn(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
-	server.Listen()
+	err := server.Listen()
 
-	return nil
+	return err
 }

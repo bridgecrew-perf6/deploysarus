@@ -1,26 +1,26 @@
 package server
 
 import (
+	"fmt"
 	"net/http"
-	"strconv"
 
 	"github.com/cjaewon/deploysarus/utils/config"
+	"github.com/cjaewon/deploysarus/utils/logger.go"
 )
 
 // Listen starts server for catch hooks
 func Listen() error {
 	platform := config.GetString("platform")
 	address := config.GetString("server.address")
-	port := ":" + strconv.Itoa(config.GetInt("server.port"))
+	port := config.GetInt("server.port")
 	path := config.GetString("server.path")
 
 	if platform == "github" {
 		http.HandleFunc(path, githubHandler())
 	}
 
-	if err := http.ListenAndServe(address+port, nil); err != nil {
-		return err
-	}
+	logger.Printlnf("Receiver Server is available at http://%s:%d", address, port)
 
-	return nil
+	err := http.ListenAndServe(fmt.Sprintf("%s:%d", address, port), nil)
+	return err
 }
