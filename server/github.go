@@ -6,6 +6,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/cjaewon/deploysarus/utils/color"
 	"github.com/cjaewon/deploysarus/utils/commandline"
 	"github.com/cjaewon/deploysarus/utils/config"
 	"github.com/cjaewon/deploysarus/utils/logger.go"
@@ -13,6 +14,7 @@ import (
 )
 
 func githubHandler() func(w http.ResponseWriter, r *http.Request) {
+	// check post when no secret key
 	secretKey := config.GetString("secret_key")
 	if secretKey == "" {
 		logger.ErrorlnFatal("Cant't find secret_key from config file or env")
@@ -30,8 +32,10 @@ func githubHandler() func(w http.ResponseWriter, r *http.Request) {
 		payload, err := hook.Parse(r, events...)
 		if err != nil {
 			if err != github.ErrEventNotFound {
-				logger.Error(err)
+				logger.Errorln(err)
 			}
+
+			return
 		}
 
 		switch payload.(type) {
@@ -47,11 +51,13 @@ func githubHandler() func(w http.ResponseWriter, r *http.Request) {
 				logger.ErrorlnfFatal("%s Steps parsing error, %v", trigger, err)
 			}
 
+			logger.Printlnf(color.Bold("Starting %s ..."), trigger)
+
 			for _, step := range steps {
 				if step.Name != "" {
-					logger.Printlnf("%s:", step.Name)
+					logger.Printlnf(color.Bold("▶ %s:"), step.Name)
 				} else {
-					logger.Println("%s:", step.Run)
+					logger.Println(color.Bold("▶ %s:"), step.Run)
 				}
 
 				multiline := strings.Split(step.Run, "\n")
@@ -68,6 +74,8 @@ func githubHandler() func(w http.ResponseWriter, r *http.Request) {
 						continue
 					}
 				}
+
+				logger.Println()
 			}
 		}
 	}

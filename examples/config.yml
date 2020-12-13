@@ -1,10 +1,9 @@
 name: example server
 platform: github
-secret_key: ''
 
 server:
-  # address: '0.0.0.0'
-  # port: 3000
+  # address: 'localhost'
+  # port: 1515
   path: '/'
 
 
@@ -16,5 +15,5 @@ on:
 jobs:
   deploy:
     steps :
-      - name: Just echo hello world
+      - name: Just echo hello world∂
         run: echo "Hello World"

@@ -3,6 +3,8 @@ package logger
 import (
 	"fmt"
 	"os"
+
+	"github.com/cjaewon/deploysarus/utils/color"
 )
 
 // Print is fmt Print wrapper
@@ -27,13 +29,14 @@ func Printlnf(format string, v ...interface{}) {
 
 // Warn is fmt Print wrapper with prefix
 func Warn(v ...interface{}) {
-	fmt.Print("Warn: ")
+	fmt.Print(color.Yellow("Warn") + ": ")
 	fmt.Print(v...)
 }
 
 // Warnf is fmt Printf wrapper with prefix
 func Warnf(format string, v ...interface{}) {
-	fmt.Printf("Warn: %s", v...)
+	fmt.Printf(color.Yellow("Warn") + ": ")
+	fmt.Printf(format, v...)
 }
 
 // Warnln is Error wrapper with new line
@@ -44,13 +47,14 @@ func Warnln(v ...interface{}) {
 
 // Error is fmt Print wrapper with prefix
 func Error(v ...interface{}) {
-	fmt.Print("Error: ")
+	fmt.Print(color.Red("Error") + ": ")
 	fmt.Print(v...)
 }
 
 // Errorf is fmt Printf wrapper with prefix
 func Errorf(format string, v ...interface{}) {
-	fmt.Printf("Error: %s", v...)
+	fmt.Printf(color.Red("Error") + ": ")
+	fmt.Printf(format, v...)
 }
 
 // Errorln is Error wrapper with new line
