@@ -49,9 +49,9 @@ func githubHandler() func(w http.ResponseWriter, r *http.Request) {
 
 			for _, step := range steps {
 				if step.Name != "" {
-					logger.Printlnf("Start running %s step", step.Name)
+					logger.Printlnf("%s:", step.Name)
 				} else {
-					logger.Println("Start running %s step", step.Run)
+					logger.Println("%s:", step.Run)
 				}
 
 				multiline := strings.Split(step.Run, "\n")
@@ -62,8 +62,9 @@ func githubHandler() func(w http.ResponseWriter, r *http.Request) {
 						continue
 					}
 
+					logger.Printlnf("$ %s", line)
 					if err := commandline.Execute(name, args...); err != nil {
-						logger.Error()
+						logger.Error(err)
 						continue
 					}
 				}
