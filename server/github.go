@@ -4,10 +4,9 @@ import (
 	"fmt"
 	"net/http"
 	"os"
-	"strings"
 
+	"github.com/cjaewon/deploysarus/utils"
 	"github.com/cjaewon/deploysarus/utils/color"
-	"github.com/cjaewon/deploysarus/utils/commandline"
 	"github.com/cjaewon/deploysarus/utils/config"
 	"github.com/cjaewon/deploysarus/utils/logger.go"
 	"gopkg.in/go-playground/webhooks.v5/github"
@@ -40,42 +39,29 @@ func githubHandler() func(w http.ResponseWriter, r *http.Request) {
 
 		switch payload.(type) {
 		case github.PushPayload:
-			// push := payload.(github.PushPayload)
-			// fmt.Printf("%+v", push)
-			var steps []Step
+			var push github.PushPayload = payload.(github.PushPayload)
+			var jobs Jobs
 
 			trigger := config.GetString("on.push.trigger")
-			err := config.UnmarshalKey(fmt.Sprintf("jobs.%s.steps", trigger), &steps)
+			branches := config.GetStringSlice("on.push.branches")
 
-			if err != nil {
-				logger.ErrorlnfFatal("%s Steps parsing error, %v", trigger, err)
+			if trigger != "" {
+				logger.Warnln("Can't find trigger of push event")
+				return
+			}
+
+			if len(branches) != 0 && !utils.Contain(branches, push.Ref) {
+				return
+			}
+
+			if err := config.UnmarshalKey(fmt.Sprintf("jobs.%s", trigger), &jobs); err != nil {
+				logger.ErrorlnfFatal("%s jobs parsing error, %v", trigger, err)
 			}
 
 			logger.Printlnf(color.Bold("Starting %s ..."), trigger)
 
-			for _, step := range steps {
-				if step.Name != "" {
-					logger.Printlnf(color.Bold("▶ %s:"), step.Name)
-				} else {
-					logger.Println(color.Bold("▶ %s:"), step.Run)
-				}
-
-				multiline := strings.Split(step.Run, "\n")
-				for _, line := range multiline {
-					name, args, err := commandline.ParseCommandline(line)
-					if err != nil {
-						logger.Errorln("Commandline parsing error at %s")
-						continue
-					}
-
-					logger.Printlnf("$ %s", line)
-					if err := commandline.Execute(name, args...); err != nil {
-						logger.Error(err)
-						continue
-					}
-				}
-
-				logger.Println()
+			for _, step := range jobs.Steps {
+				runStep(&step)
 			}
 		}
 	}

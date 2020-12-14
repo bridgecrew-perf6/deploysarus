@@ -1,11 +1,21 @@
 package server
 
 import (
+	"strings"
+
+	"github.com/cjaewon/deploysarus/utils/color"
+	"github.com/cjaewon/deploysarus/utils/commandline"
 	"github.com/cjaewon/deploysarus/utils/config"
 	"github.com/cjaewon/deploysarus/utils/logger.go"
 
 	"gopkg.in/go-playground/webhooks.v5/github"
 )
+
+// Jobs defines a Jobs type
+type Jobs struct {
+	Sync  bool   `mapstructure:"sync"`
+	Steps []Step `mapstructure:"steps"`
+}
 
 // Step defines a jobs steps type
 type Step struct {
@@ -81,4 +91,29 @@ func parseGithubEvent(platform string) []github.Event {
 	}
 
 	return events
+}
+
+func runStep(step *Step) {
+	if step.Name != "" {
+		logger.Printlnf(color.Bold("▶ %s:"), step.Name)
+	} else {
+		logger.Println(color.Bold("▶ %s:"), step.Run)
+	}
+
+	multiline := strings.Split(step.Run, "\n")
+	for _, line := range multiline {
+		name, args, err := commandline.ParseCommandline(line)
+		if err != nil {
+			logger.Errorln("Commandline parsing error at %s")
+			continue
+		}
+
+		logger.Printlnf("$ %s", line)
+		if err := commandline.Execute(name, args...); err != nil {
+			logger.Error(err)
+			continue
+		}
+	}
+
+	logger.Println()
 }
